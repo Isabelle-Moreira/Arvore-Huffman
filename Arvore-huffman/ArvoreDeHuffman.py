@@ -5,11 +5,17 @@ class ArvoreDeHuffman:
         self.nodoEsquerdo= None
         self.nodoDireito=None 
 
-    def SelecionaNodoMenorChave(self):
-        pass
-
     def FundeChave(self):
-        pass
+        nodo = NodoDaArvore(caractere, frequencia)
+
+        if(self.raiz == None):
+            self.raiz = nodo
+        else:
+            novo_pai = NodoDaArvore(None, self.raiz.frequencia + nodo.frequencia)
+            novo_pai.esquerdo = self.raiz
+            novo_pai.direito = nodo
+            self.raiz = novo_pai
+
     def CriarNodo(self,pai, Esquerdo,Direito,frequencia):
         pass
     def EscreveArvoreBinario(self):
