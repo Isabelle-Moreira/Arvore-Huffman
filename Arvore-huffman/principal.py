@@ -27,9 +27,14 @@ for chave in dicionario_frequencia.keys():
     nodo = NodoDaArvore(chave, dicionario_frequencia[chave])
     array_nodos.append(nodo)
 
-menor_nodo = SelecionaNodoMenorChave(array_nodos)
 
-print(dicionario_frequencia)
-print(array_nodos)
-print("CARACTERE", menor_nodo.caractere)
-print("FREQUENCIA", menor_nodo.frequencia)
+arvoreHuffman = ArvoreDeHuffman()
+
+while len(array_nodos)!=0:
+    menor_nodo = SelecionaNodoMenorChave(array_nodos)
+    arvoreHuffman.FundeChave(menor_nodo)
+    array_nodos.remove(menor_nodo)
+
+tabela= arvoreHuffman.criaTabelaDeSimbolo(arvoreHuffman.raiz)
+
+arvoreHuffman.compactaArquivo("arquivo-entrada.txt", "arquivo_saida.txt")
