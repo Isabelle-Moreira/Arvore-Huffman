@@ -1,10 +1,19 @@
 from NodoDaArvore import NodoDaArvore
 import binascii
 
+def binario_para_decimal(string_binario):
+    valor = 0
+    potencia = 1
+    for i in range(len(string_binario)-1, -1, -1):
+        valor+=int(string_binario[i])*potencia
+        potencia *= 2
+    
+    return valor
+
 class ArvoreDeHuffman:
     def __init__(self):
         self.raiz = None
-
+    #faz commit
     def FundeChave(self, nodo):
         if(self.raiz == None):
             self.raiz = nodo
@@ -46,7 +55,6 @@ class ArvoreDeHuffman:
 
         self.SalvaArvoreBinario(caminho_arquivo_compactado)
         
-        print(tabela_simbolo)
         for linha in arquivo_entrada:
             for caractere in linha:
                 arquivo_saida.write(tabela_simbolo[caractere])
@@ -54,7 +62,7 @@ class ArvoreDeHuffman:
         arquivo_saida.close()
         arquivo_entrada.close()
 
-    def constroiArvore(self, pai, nodo, direcao, bitString, bitStringIndex):
+    def constroiArvore(self, nodo, bitString, bitStringIndex):
         '''
             CRIO O NODO
             - Se a string que estou lendo é 0, ele desce pela esquerda
@@ -70,7 +78,7 @@ class ArvoreDeHuffman:
         if self.raiz == None:
             self.raiz = nodo
             nodo = self.raiz
-        
+        bitStringIndex+=1
         while self.raiz.direito == None:
             bit = bitString[bitStringIndex]
             if bit=="0":
@@ -87,13 +95,13 @@ class ArvoreDeHuffman:
                 for i in range(bitStringIndex+1, bitStringIndex+9, 1):
                     caractere_bits+=bitString[i]
                 
-                caractere_bits = caractere_bits.encode('ascii')
-                caractere_ascii = binascii.b2a_uu(caractere_bits)
+                caractere_decimal = binario_para_decimal(caractere_bits)
+                caractere_ascii = chr(caractere_decimal)
                 
                 bitStringIndex+=9
                 novo_nodo = NodoDaArvore(None, 0)
                 novo_nodo.pai = nodo
-                novo_nodo.caractere = caractere_ascii.decode()
+                novo_nodo.caractere = caractere_ascii
 
                 if nodo.esquerdo == None:
                     nodo.esquerdo = novo_nodo
@@ -101,9 +109,42 @@ class ArvoreDeHuffman:
                     nodo.direito = novo_nodo
                     nodo = nodo.pai
 
+        return bitStringIndex
         
-    def descompactaArquivo(self, arvoreBinario, arquivocompactado):
-        pass
+    def descompactaArquivo(self, caminho_arquivo_compactado):
+        arquivo_descompactado = open('arquivo_descompactado.txt', "a")
+        arquivo_compactado = open(caminho_arquivo_compactado)
+
+        conteudo_compactado = arquivo_compactado.readline()
+
+        index_do_ultimo_bit_lido = self.constroiArvore(self.raiz, conteudo_compactado, 0)
+
+        tabela = self.criaTabelaDeSimbolo(self.raiz)
+        print(tabela)
+        print(index_do_ultimo_bit_lido)
+        for i in range(13):
+            print(conteudo_compactado[index_do_ultimo_bit_lido+i])
+        
+        
+        nodo_busca = self.raiz
+        #Então, construa a árvore
+        for i in range (index_do_ultimo_bit_lido, len(conteudo_compactado), 1):
+            bit = conteudo_compactado[i]
+
+            if bit == "0":
+                nodo_busca = nodo_busca.esquerdo
+            if bit == "1":
+                nodo_busca = nodo_busca.direito
+            #Se encontrou uma folha, escreva o caractere correspondente e volte para a raiz
+            if nodo_busca.esquerdo is None and nodo_busca.direito is None:
+                arquivo_descompactado.write(nodo_busca.caractere)
+                nodo_busca = self.raiz
+            #Se não é folha, veja o bit lido. Se for 0, desça pela esquerda.
+            #Se não, desça pela direita.
+            
+
+        arquivo_descompactado.close()
+        arquivo_compactado.close()
 
     def printArvore(self, nodo, prefixo="", is_esquerdo=True):
         if nodo is not None:
