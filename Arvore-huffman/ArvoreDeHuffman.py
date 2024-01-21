@@ -1,4 +1,6 @@
 from NodoDaArvore import NodoDaArvore
+import binascii
+
 class ArvoreDeHuffman:
     def __init__(self):
         self.raiz = None
@@ -51,7 +53,55 @@ class ArvoreDeHuffman:
 
         arquivo_saida.close()
         arquivo_entrada.close()
-    
+
+    def constroiArvore(self, pai, nodo, direcao, bitString, bitStringIndex):
+        '''
+            CRIO O NODO
+            - Se a string que estou lendo é 0, ele desce pela esquerda
+            - Se a string que estou lendo é 0 e eu DESCI pela esquerda,
+              então filho esquerdo do pai vira o novo nodo
+            - Se a string que estou lendo é 0 e eu DESCI pela direita,
+              então o filho direito do pai recebe o novo nodo
+            - Se é 1, é uma folha e eu paro de chamar o método. Eu vejo se ela desceu
+               pela esquerda ou pela direita.
+        '''
+        
+        nodo = NodoDaArvore(None, 0)
+        if self.raiz == None:
+            self.raiz = nodo
+            nodo = self.raiz
+        
+        while self.raiz.direito == None:
+            bit = bitString[bitStringIndex]
+            if bit=="0":
+                novo_nodo = NodoDaArvore(None, 0)
+                novo_nodo.pai = nodo
+                nodo.esquerdo = novo_nodo
+
+                nodo = nodo.esquerdo
+
+                bitStringIndex+=1
+
+            if bit == "1":
+                caractere_bits=''
+                for i in range(bitStringIndex+1, bitStringIndex+9, 1):
+                    caractere_bits+=bitString[i]
+                
+                caractere_bits = caractere_bits.encode('ascii')
+                caractere_ascii = binascii.b2a_uu(caractere_bits)
+                
+                bitStringIndex+=9
+                novo_nodo = NodoDaArvore(None, 0)
+                novo_nodo.pai = nodo
+                novo_nodo.caractere = caractere_ascii.decode()
+
+                if nodo.esquerdo == None:
+                    nodo.esquerdo = novo_nodo
+                elif nodo.direito == None:
+                    nodo.direito = novo_nodo
+                    nodo = nodo.pai
+
+        
     def descompactaArquivo(self, arvoreBinario, arquivocompactado):
         pass
 

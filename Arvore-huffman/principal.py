@@ -38,3 +38,18 @@ while len(array_nodos)!=0:
 tabela= arvoreHuffman.criaTabelaDeSimbolo(arvoreHuffman.raiz)
 
 arvoreHuffman.compactaArquivo("arquivo-entrada.txt", "arquivo_saida.txt")
+
+print("ARVORE ESPERADA")
+arvoreHuffman.printArvore(arvoreHuffman.raiz)
+
+arquivo_compactado = open("arquivo_saida.txt", "r")
+conteudo = arquivo_compactado.readline()
+
+arvoreHuffman.raiz = None
+
+arvoreHuffman.constroiArvore(None, arvoreHuffman.raiz, '', conteudo, 0)
+
+
+
+print("ÁRVORE CONSTRUIDA")
+arvoreHuffman.printArvore(arvoreHuffman.raiz)
