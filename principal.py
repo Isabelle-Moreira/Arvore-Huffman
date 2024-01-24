@@ -9,8 +9,8 @@ def SelecionaNodoMenorChave(array_nodos):
     
     return menor_nodo
 
-
-arquivo = open("arquivo_entrada.txt", encoding='latin-1')
+nome_arquivo = "arquivo_entrada.txt"
+arquivo = open(nome_arquivo, encoding='latin-1')
 
 dicionario_frequencia ={}
 
@@ -37,13 +37,12 @@ while len(array_nodos)!=0:
 
 tabela= arvoreHuffman.criaTabelaDeSimbolo(arvoreHuffman.raiz)
 
-arvoreHuffman.compactaArquivo("arquivo_entrada.txt", "arquivo_saida.txt")
+arvoreHuffman.compactaArquivo(nome_arquivo, "arquivo_saida.txt")
 arvoreHuffman.converteBinario("arquivo_saida.txt")
 
 arquivo_compactado = open("arquivo_saida.txt", "r")
-conteudo = arquivo_compactado.readline()
+#conteudo = arquivo_compactado.readline()
 
-arvoreHuffman.raiz = None
+#arvoreHuffman.raiz = None
 
-arvoreHuffman.descompactaArquivo("arquivo_saida.txt")
-arvoreHuffman.printArvore(arvoreHuffman.raiz)
+#arvoreHuffman.descompactaArquivo("arquivo_saida.txt")

@@ -66,20 +66,24 @@ class ArvoreDeHuffman:
         arquivo_entrada = open(caminho_arquivo_compactado, "r")
 
         # Lê o conteúdo do arquivo de texto
-        data = arquivo_entrada.read().strip()
+        bitString = arquivo_entrada.read().strip()
 
+        #print(data)
         # Converte a sequência de 0s e 1s para uma representação binária
-        binary_data = ''.join('1' if bit == '1' else '0' for bit in data)
 
-        # Adiciona zeros à direita para garantir que a quantidade total de bits seja múltiplo de 8
-        while len(binary_data) % 8 != 0:
-            binary_data += '0'
-
-        # Converte a sequência de bits para bytes
         byte_array = bytearray()
-        for i in range(0, len(binary_data), 8):
-            byte = int(binary_data[i:i+8], 2)
-            byte_array.append(byte)
+        byte = ''
+        for bit in bitString:
+            byte += bit
+            if(len(byte)==8):
+                byte = int(byte, 2)
+                byte_array.append(byte)
+                byte = ''
+        
+        if(len(byte)<8):
+            while len(byte) < 8:
+                byte = '0' + byte
+        # Adiciona zeros à esquerda para garantir que a quantidade total de bits seja múltiplo de 8
 
         # Escreve os dados binários em um novo arquivo
         with open('arquivo_binario.bin', 'wb') as file:
@@ -143,12 +147,7 @@ class ArvoreDeHuffman:
         index_do_ultimo_bit_lido = self.constroiArvore(self.raiz, conteudo_compactado, 0)
 
         tabela = self.criaTabelaDeSimbolo(self.raiz)
-        print(tabela)
-        print(index_do_ultimo_bit_lido)
-        for i in range(13):
-            print(conteudo_compactado[index_do_ultimo_bit_lido+i])
-        
-        
+             
         nodo_busca = self.raiz
         #Então, construa a árvore
         for i in range (index_do_ultimo_bit_lido, len(conteudo_compactado), 1):
