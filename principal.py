@@ -56,14 +56,5 @@ arvoreHuffman.raiz = array_nodos[0]
 
 arvoreHuffman.printArvore(arvoreHuffman.raiz)
 
-#tabela= arvoreHuffman.criaTabelaDeSimbolo(arvoreHuffman.raiz)
-
 arvoreHuffman.compactaArquivo(nome_arquivo, "arquivo_saida.txt")
 arvoreHuffman.converteBinario("arquivo_saida.txt")
-
-#arquivo_compactado = open("arquivo_saida.txt", "r")
-#conteudo = arquivo_compactado.readline()
-
-#arvoreHuffman.raiz = None
-
-#arvoreHuffman.descompactaArquivo("arquivo_saida.txt")
