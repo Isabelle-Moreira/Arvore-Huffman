@@ -1,5 +1,8 @@
 from ArvoreDeHuffman import ArvoreDeHuffman
 from NodoDaArvore import NodoDaArvore
+from ordenador import Ordenator
+
+ordenador = Ordenator()
 
 def SelecionaNodoMenorChave(array_nodos):
     menor_nodo = array_nodos[0]
@@ -9,7 +12,7 @@ def SelecionaNodoMenorChave(array_nodos):
     
     return menor_nodo
 
-nome_arquivo = "arquivo_entrada.txt"
+nome_arquivo = "compactacao1M.txt"
 arquivo = open(nome_arquivo, encoding='latin-1')
 
 dicionario_frequencia ={}
@@ -28,19 +31,37 @@ for chave in dicionario_frequencia.keys():
     array_nodos.append(nodo)
 
 
+
 arvoreHuffman = ArvoreDeHuffman()
 
-while len(array_nodos)!=0:
-    menor_nodo = SelecionaNodoMenorChave(array_nodos)
-    arvoreHuffman.FundeChave(menor_nodo)
+ordenador.insercao(array_nodos)
+while len(array_nodos)!=1:
+    menor_nodo = array_nodos[0]
+    segundo_menor_nodo = array_nodos[1]
+    novo_nodo = NodoDaArvore(None, menor_nodo.frequencia+segundo_menor_nodo.frequencia)
+    
+    novo_nodo.esquerdo = menor_nodo
+    novo_nodo.direito = segundo_menor_nodo
+    
+    menor_nodo.pai = novo_nodo
+    segundo_menor_nodo.pai = novo_nodo
+    
     array_nodos.remove(menor_nodo)
+    array_nodos.remove(segundo_menor_nodo)
+    array_nodos.append(novo_nodo)
 
-tabela= arvoreHuffman.criaTabelaDeSimbolo(arvoreHuffman.raiz)
+    ordenador.insercao(array_nodos)
+
+arvoreHuffman.raiz = array_nodos[0]
+
+arvoreHuffman.printArvore(arvoreHuffman.raiz)
+
+#tabela= arvoreHuffman.criaTabelaDeSimbolo(arvoreHuffman.raiz)
 
 arvoreHuffman.compactaArquivo(nome_arquivo, "arquivo_saida.txt")
 arvoreHuffman.converteBinario("arquivo_saida.txt")
 
-arquivo_compactado = open("arquivo_saida.txt", "r")
+#arquivo_compactado = open("arquivo_saida.txt", "r")
 #conteudo = arquivo_compactado.readline()
 
 #arvoreHuffman.raiz = None
